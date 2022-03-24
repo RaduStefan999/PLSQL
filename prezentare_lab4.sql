@@ -16,7 +16,7 @@ BEGIN
                                         fib_table(fib_table.LAST - 2);
     END LOOP;
     
-    for v_contor IN fib_table.FIRST..fib_table.COUNT LOOP
+    for v_contor IN fib_table.FIRST..fib_table.LAST LOOP
         if fib_table.exists(v_contor) THEN
             DBMS_OUTPUT.PUT_LINE(fib_table(v_contor));
         END IF;    
@@ -90,8 +90,39 @@ DECLARE
 BEGIN
     v_exemple := exemple(1);
     v_exemple.EXTEND;
-    DBMS_OUTPUT.PUT_LINE(v_exemple(v_exemple.LAST)%);
+    DBMS_OUTPUT.PUT_LINE(v_exemple(v_exemple.LAST)); -- NO ERROR
     DBMS_OUTPUT.PUT_LINE(v_exemple.COUNT);
+END;
+
+--Last different from count
+
+DECLARE
+    TYPE exemple IS TABLE OF NUMBER NOT NULL;
+    v_exemple exemple;
+BEGIN
+    v_exemple := exemple(1, 2);
+    v_exemple.EXTEND;
+    DBMS_OUTPUT.PUT_LINE(v_exemple(v_exemple.LAST));
+    DBMS_OUTPUT.PUT_LINE(v_exemple.COUNT);
+    v_exemple.DELETE(2);
+    DBMS_OUTPUT.PUT_LINE(v_exemple.COUNT);
+    DBMS_OUTPUT.PUT_LINE(v_exemple.LAST);
+END;
+
+--Delete and extend
+
+DECLARE
+    TYPE prenume IS TABLE OF varchar2(10);
+    student prenume;
+BEGIN
+    student := prenume('Gigel', 'Ionel', 'Maria');  
+    student.EXTEND(4,2); -- copii elementul al doilea de 4 ori
+    student.delete(2); -- sterg elementul al doilea
+    for i in student.first..student.last loop
+        if student.exists(i) then -- daca incerc sa afisez ceva ce nu exista se va produce o eroare
+           DBMS_OUTPUT.PUT_LINE(i||' - '||student(i));  -- afisam pozitia si valoarea
+        end if;
+    end loop;
 END;
 
 --Get data into nested table
