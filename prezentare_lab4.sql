@@ -23,6 +23,29 @@ BEGIN
     END LOOP;
 END;
 
+--Matrix example
+
+DECLARE
+    TYPE number_table IS TABLE OF NUMBER;
+    TYPE number_matrix IS TABLE OF number_table;
+    
+    row1 number_table := number_table(1, 2, 3);
+    row2 number_table := number_table(4, 5, 6);
+    row3 number_table := number_table(7, 8, 9);
+    
+    matrix number_matrix := number_matrix(row1, row2, row3);
+    
+BEGIN
+    
+    for v_row_it IN number_matrix.FIRST..number_matrix.LAST LOOP
+        if number_matrix.exists(v_row_it) THEN
+  
+        END IF;
+    END LOOP;
+    
+END;
+
+
 -- Deleting element
 
 DECLARE
