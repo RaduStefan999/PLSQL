@@ -208,6 +208,34 @@ BEGIN
     END LOOP;
 END;
 
+--Camp cu Nested Table
+
+GRANT CREATE TYPE TO STUDENT; -- aceasta linie se executa din "SYS as SYSDBA"
+
+CREATE OR REPLACE TYPE lista_prenume AS TABLE OF VARCHAR2(10);
+/
+CREATE TABLE persoane (nume varchar2(10), 
+       prenume lista_prenume)
+       NESTED TABLE prenume STORE AS lista;
+/       
+
+INSERT INTO persoane VALUES('Popescu', lista_prenume('Ionut', 'Razvan'));
+INSERT INTO persoane VALUES('Ionescu', lista_prenume('Elena', 'Madalina'));
+INSERT INTO persoane VALUES('Rizea', lista_prenume('Mircea', 'Catalin'));
+/
+SELECT * FROM persoane;
+
+
+DECLARE    
+    sir_prenume persoane.prenume%type;
+BEGIN
+    sir_prenume := lista_prenume('Cristi', 'Tudor', 'Virgil');
+    INSERT INTO persoane VALUES ('Gurau', sir_prenume);
+    DBMS_OUTPUT.PUT_LINE('Gata');
+END;
+
+----------------------------
+
 DECLARE
     v_iterator NUMBER := 0;
 BEGIN
