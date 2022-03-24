@@ -129,7 +129,7 @@ END;
 --Get data into nested table
 
 DECLARE 
-   CURSOR studenti_cursor IS SELECT * FROM studenti;
+   CURSOR studenti_cursor IS SELECT * FROM studenti ORDER BY studenti.nume;
    TYPE linie_student IS TABLE OF studenti_cursor%ROWTYPE;
    tabela_studenti linie_student;
 BEGIN
@@ -139,6 +139,30 @@ BEGIN
    for i in tabela_studenti.first..tabela_studenti.last loop
         if tabela_studenti.exists(i) then -- daca incerc sa afisez ceva ce nu exista se va produce o eroare
            DBMS_OUTPUT.PUT_LINE(i||' - '||tabela_studenti(i).nume);  -- afisam pozitia si valoarea
+        end if;
+    end loop;   
+    DBMS_OUTPUT.PUT_LINE('Numar studenti: '||tabela_studenti.COUNT);
+END;
+
+--Fetch method
+
+
+DECLARE 
+   CURSOR studenti_cursor IS SELECT * FROM studenti ORDER BY studenti.nume;
+   TYPE linie_student IS TABLE OF studenti_cursor%ROWTYPE;
+   tabela_studenti linie_student := linie_student();
+BEGIN
+   OPEN studenti_cursor;
+   LOOP
+    tabela_studenti.EXTEND;
+    FETCH studenti_cursor INTO tabela_studenti(tabela_studenti.LAST);
+    EXIT WHEN studenti_cursor%NOTFOUND;
+   END LOOP;
+   CLOSE studenti_cursor;
+   
+   for i in tabela_studenti.first..tabela_studenti.last loop
+        if tabela_studenti.exists(i) then
+           DBMS_OUTPUT.PUT_LINE(i||' - '||tabela_studenti(i).nume);
         end if;
     end loop;   
     DBMS_OUTPUT.PUT_LINE('Numar studenti: '||tabela_studenti.COUNT);
