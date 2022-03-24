@@ -168,7 +168,22 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Numar studenti: '||tabela_studenti.COUNT);
 END;
 
+--Multiset operations
 
+DECLARE
+    TYPE nume IS TABLE OF VARCHAR2(10);
+    orase1 nume := nume('IASI', 'BUCURESTI', 'ORADEA');
+    orase2 nume := nume('IASI', 'TIMISOARA');
+    orase3 nume;
+BEGIN
+    orase3 := orase1 MULTISET UNION DISTINCT orase2;
+    
+    for v_contor IN orase3.FIRST..orase3.LAST LOOP
+        if orase3.exists(v_contor) THEN
+            DBMS_OUTPUT.PUT_LINE(orase3(v_contor));
+        END IF;
+    END LOOP;
+END;
 
 DECLARE
     v_iterator NUMBER := 0;
