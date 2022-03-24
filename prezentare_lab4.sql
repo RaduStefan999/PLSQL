@@ -35,11 +35,17 @@ DECLARE
     
     matrix number_matrix := number_matrix(row1, row2, row3);
     
+    suma_diagonala NUMBER := 0;
 BEGIN
     
-    for v_row_it IN number_matrix.FIRST..number_matrix.LAST LOOP
-        if number_matrix.exists(v_row_it) THEN
-  
+    for v_row_it IN matrix.FIRST..matrix.COUNT LOOP
+        if matrix.exists(v_row_it) THEN
+            for v_column_it IN matrix(v_row_it).FIRST..matrix(v_row_it).LAST LOOP
+        
+                if v_row_it = v_column_it AND matrix(v_row_it).exists(v_column_it) THEN
+                    DBMS_OUTPUT.PUT_LINE('A');
+                END IF;
+            END LOOP;    
         END IF;
     END LOOP;
     
