@@ -43,12 +43,13 @@ BEGIN
             for v_column_it IN matrix(v_row_it).FIRST..matrix(v_row_it).LAST LOOP
         
                 if v_row_it = v_column_it AND matrix(v_row_it).exists(v_column_it) THEN
-                    DBMS_OUTPUT.PUT_LINE('A');
+                    suma_diagonala := suma_diagonala + matrix(v_row_it)(v_column_it);
                 END IF;
             END LOOP;    
         END IF;
     END LOOP;
     
+    DBMS_OUTPUT.PUT_LINE(suma_diagonala);
 END;
 
 
@@ -81,6 +82,17 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Program doesn t get here');
 END;
 
+--Extend with nothing example
+
+DECLARE
+    TYPE exemple IS TABLE OF NUMBER NOT NULL;
+    v_exemple exemple;
+BEGIN
+    v_exemple := exemple(1);
+    v_exemple.EXTEND;
+    DBMS_OUTPUT.PUT_LINE(v_exemple(v_exemple.LAST)%);
+    DBMS_OUTPUT.PUT_LINE(v_exemple.COUNT);
+END;
 
 --Get data into nested table
 
