@@ -112,17 +112,18 @@ END;
 --Delete and extend
 
 DECLARE
-    TYPE prenume IS TABLE OF varchar2(10);
-    student prenume;
+    TYPE cuvinte IS TABLE OF varchar2(10);
+    propozitie cuvinte;
 BEGIN
-    student := prenume('Gigel', 'Ionel', 'Maria');  
-    student.EXTEND(4,2); -- copii elementul al doilea de 4 ori
-    student.delete(2); -- sterg elementul al doilea
-    for i in student.first..student.last loop
-        if student.exists(i) then -- daca incerc sa afisez ceva ce nu exista se va produce o eroare
-           DBMS_OUTPUT.PUT_LINE(i||' - '||student(i));  -- afisam pozitia si valoarea
-        end if;
-    end loop;
+    propozitie := cuvinte('Azi', 'am', 'prezentare');  
+    propozitie.EXTEND(2,3);
+    propozitie.delete(1);
+    propozitie.TRIM;
+    for i in propozitie.first..propozitie.last LOOP
+        if propozitie.exists(i) THEN
+           DBMS_OUTPUT.PUT_LINE(propozitie(i));
+        end IF;
+    END LOOP;
 END;
 
 --Get data into nested table
