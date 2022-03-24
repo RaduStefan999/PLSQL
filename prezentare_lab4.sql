@@ -133,9 +133,9 @@ DECLARE
    TYPE linie_student IS TABLE OF studenti_cursor%ROWTYPE;
    tabela_studenti linie_student;
 BEGIN
-   open studenti_cursor;
+   --open studenti_cursor;
    SELECT * BULK COLLECT INTO tabela_studenti FROM studenti ORDER BY studenti.nume;
-   close studenti_cursor;
+   --close studenti_cursor;
    for i in tabela_studenti.first..tabela_studenti.last loop
         if tabela_studenti.exists(i) then -- daca incerc sa afisez ceva ce nu exista se va produce o eroare
            DBMS_OUTPUT.PUT_LINE(i||' - '||tabela_studenti(i).nume);  -- afisam pozitia si valoarea
