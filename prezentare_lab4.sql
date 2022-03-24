@@ -40,22 +40,35 @@ BEGIN
     END LOOP;
 END;
 
+--Not null example
+
+DECLARE
+    TYPE exemple IS TABLE OF VARCHAR2(3) NOT NULL;
+    v_exemple exemple;
+BEGIN
+    v_exemple := exemple();
+    v_exemple.EXTEND;
+    v_exemple(v_exemple.LAST) := NULL;
+    DBMS_OUTPUT.PUT_LINE('Program doesn t get here');
+END;
+
+
 --Get data into nested table
 
 DECLARE 
    CURSOR studenti_cursor IS SELECT * FROM studenti;
    TYPE linie_student IS TABLE OF studenti_cursor%ROWTYPE;
-   lista_studenti linie_student;
+   tabela_studenti linie_student;
 BEGIN
-   open curs;
-   SELECT * BULK COLLECT INTO lista_studenti FROM studenti ORDER BY studenti.nume;
-   close curs;
-   for i in lista_studenti.first..lista_studenti.last loop
-        if lista_studenti.exists(i) then -- daca incerc sa afisez ceva ce nu exista se va produce o eroare
-           DBMS_OUTPUT.PUT_LINE(i||' - '||lista_studenti(i).nume);  -- afisam pozitia si valoarea
+   open studenti_cursor;
+   SELECT * BULK COLLECT INTO tabela_studenti FROM studenti ORDER BY studenti.nume;
+   close studenti_cursor;
+   for i in tabela_studenti.first..tabela_studenti.last loop
+        if tabela_studenti.exists(i) then -- daca incerc sa afisez ceva ce nu exista se va produce o eroare
+           DBMS_OUTPUT.PUT_LINE(i||' - '||tabela_studenti(i).nume);  -- afisam pozitia si valoarea
         end if;
     end loop;   
-    DBMS_OUTPUT.PUT_LINE('Numar studenti: '||lista_studenti.COUNT);
+    DBMS_OUTPUT.PUT_LINE('Numar studenti: '||tabela_studenti.COUNT);
 END;
 
 
