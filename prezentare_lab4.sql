@@ -144,6 +144,29 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Numar studenti: '||tabela_studenti.COUNT);
 END;
 
+--Get data into nested table with next
+
+DECLARE 
+   CURSOR studenti_cursor IS SELECT * FROM studenti ORDER BY studenti.nume;
+   TYPE linie_student IS TABLE OF studenti_cursor%ROWTYPE;
+   tabela_studenti linie_student;
+   v_index Number := 0;
+BEGIN
+   --open studenti_cursor;
+   SELECT * BULK COLLECT INTO tabela_studenti FROM studenti ORDER BY studenti.nume;
+   --close studenti_cursor;
+   
+   v_index := tabela_studenti.first;
+   
+   LOOP
+       DBMS_OUTPUT.PUT_LINE(v_index||' - '||tabela_studenti(v_index).nume); 
+       v_index := tabela_studenti.NEXT(v_index);
+       EXIT WHEN v_index IS NULL;
+   END LOOP;
+ 
+    DBMS_OUTPUT.PUT_LINE('Numar studenti: '||tabela_studenti.COUNT);
+END;
+
 --Fetch method
 
 
